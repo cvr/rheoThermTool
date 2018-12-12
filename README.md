@@ -17,6 +17,14 @@ framework for both the constitutive and energy equations.
 This software was developed and tested using the [OpenFOAM-6](https://github.com/OpenFOAM/OpenFOAM-6) open source CFD toolbox from OpenFOAM Foundation.
 
 
+
+## Third-Party software
+
+The following third-party software is used in `rheoThermTool`:
+
+* [Eigen](http://eigen.tuxfamily.org/).
+
+
 ## Libraries compiled by `rheoThermTool`
 
 The default location for the libraries of `rheoThermTool`

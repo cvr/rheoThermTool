@@ -1,0 +1,23 @@
+constitutiveModel/constitutiveModel.C
+
+constitutiveEqs/constitutiveEq/constitutiveEq.C
+constitutiveEqs/constitutiveEq/constitutiveEqNew.C
+
+ constitutiveEqs/Oldroyd-B/Oldroyd_B.C
+
+ constitutiveEqs/Giesekus/Giesekus.C
+
+ constitutiveEqs/PTTexp/PTTexp.C
+ 
+ constitutiveEqs/PTTlinear/PTTlinear.C
+
+ constitutiveEqs/GNF/Newtonian/Newtonian.C
+ constitutiveEqs/GNF/PowerLaw/PowerLaw.C
+ constitutiveEqs/GNF/CarreauYasuda/CarreauYasuda.C
+
+ constitutiveEqs/multiMode/multiMode.C
+ 
+constitutiveTwoPhaseMixture/constitutiveTwoPhaseMixture.C
+immiscibleConstitutiveTwoPhaseMixture/immiscibleConstitutiveTwoPhaseMixture.C
+
+LIB = $(FOAM_USER_LIBBIN)/libRheoThermConstitutiveEq

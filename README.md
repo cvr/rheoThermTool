@@ -11,7 +11,7 @@ such as the Arrhenius equation.
 The initial implementation for the non-newtonian fluid models
 was based from the [rheoTool](https://github.com/fppimenta/rheoTool) toolbox.
 The thermo-rheological aspects of the fluid models follows
-the [Peters & Baaijens, 1997, J. Non-Newtonian Fluid Mech.](http://doi.org/10.1016/S0377-0257(96)01511-X)
+the [Peters & Baaijens (1997, J. Non-Newtonian Fluid Mech.)](http://doi.org/10.1016/S0377-0257(96)01511-X)
 framework for both the constitutive and energy equations.
 
 This software was developed and tested using the [OpenFOAM-6](https://github.com/OpenFOAM/OpenFOAM-6) open source CFD toolbox from OpenFOAM Foundation.

@@ -29,9 +29,11 @@ Description
     Base class which can be directly called by applications to use any of 
     the models derived from class constitutivEq.
 
-    Based on:
+    Based from:
     - libviscoelasticTransportModels library written by Jovani L. Favero.
     - rheoTool library written by Francisco Pimenta and Manuel A. Alves. 
+    
+    This class is part of rheoThermTool.
 
 SourceFiles
     constitutiveModel.C
@@ -102,6 +104,9 @@ public:
         
         //- Return the total stress tensor (solvent + polymeric)
         virtual tmp<volSymmTensorField> tauTotal() { return eqPtr_->tauTotal(); }
+        
+        //- Return the solvent stress tensor (newtonian)
+        virtual tmp<volSymmTensorField> tauN() { return eqPtr_->tauN(); }
         
         //- Return the coupling term for the momentum equation
         virtual tmp<fvVectorMatrix> divTau(const volVectorField& U)

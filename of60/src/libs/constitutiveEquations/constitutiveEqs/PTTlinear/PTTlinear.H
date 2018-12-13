@@ -28,9 +28,12 @@ Class
 Description
     Phan-Thien/Tanner viscoelastic fluid model in linear function
     formulation and inclusion of thermal effects.
-    Original code based from:
+    
+    Based from:
     - libviscoelasticTransportModels library written by Jovani L. Favero.
     - rheoTool library written by Francisco Pimenta and Manuel A. Alves.
+    
+    This class is part of rheoThermTool.
 
 SourceFiles
     PTTlinear.C

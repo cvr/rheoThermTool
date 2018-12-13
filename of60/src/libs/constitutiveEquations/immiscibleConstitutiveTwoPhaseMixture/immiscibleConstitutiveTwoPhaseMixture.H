@@ -25,10 +25,15 @@ Class
     Foam::immiscibleConstitutiveTwoPhaseMixture
 
 Description
-    An immiscible GNF or VE two-phase mixture transport model
-    Original code based from:
+    WARNING: Development in progress!
+
+    An immiscible GNF or VE two-phase mixture transport model.
+    
+    Based from:
     - libviscoelasticTransportModels library written by Jovani L. Favero.
     - rheoTool library written by Francisco Pimenta and Manuel A. Alves.
+    
+    This class is part of rheoThermTool.
 
 SourceFiles
     immiscibleConstitutiveTwoPhaseMixture.C

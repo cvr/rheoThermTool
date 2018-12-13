@@ -29,8 +29,10 @@ Description
     Base class which can be directly called by applications to use any of 
     the models derived from class thermFunScheme.
 
-    Based on the libviscoelasticTransportModels library written by Jovani
-    L. Favero. 
+    This class is part of rheoThermTool.
+
+Files
+    thermFunModel.C
 
 \*---------------------------------------------------------------------------*/
 
@@ -76,7 +78,7 @@ public:
 
 
     // Constructors
-        
+
         //- Construct from components
         thermFunModel(const word& name, const volScalarField& T);
 
@@ -88,14 +90,17 @@ public:
 
     // Member Functions
 
+        //- Return true if thermFunScheme is active
+        virtual bool active() const { return funPtr_->active(); }
+
         //- Return true if thermFunScheme is constant
-        virtual bool isConstant() const;
+        virtual bool isConstant() const { return funPtr_->isConstant(); }
         
         //- Get field F
-        virtual tmp<volScalarField> F() const;
+        virtual tmp<volScalarField> F() const { return funPtr_->F(); }
 
         //- Get field F0
-        virtual const dimensionedScalar F0() const;
+        virtual const dimensionedScalar F0() const { return funPtr_->F0(); }
 
         //- Apply thermFun to compute F_ 
         virtual void calcThermFun

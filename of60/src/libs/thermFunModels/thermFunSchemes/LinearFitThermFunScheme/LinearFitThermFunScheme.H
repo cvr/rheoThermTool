@@ -25,7 +25,16 @@ License
 Class
     LinearFitThermFunScheme
 
-SourceFiles
+Description
+    Applies a linear dependency with temperature, namely:
+
+        F = F0 * ( c1 + c2*(T - T0) )
+    
+    where c1 is dimless and c2 must have dimensions of 1/dimTemperature.
+    
+    This class is part of rheoThermTool.
+
+Files
     LinearFitThermFunScheme.C
 
 \*---------------------------------------------------------------------------*/
@@ -96,33 +105,21 @@ public:
 
     // Member Functions
         
+        //- Return true if thermFunScheme is active
+        virtual bool active() const { return true; }
+        
         //- Return false as this thermFun is not constant
-        virtual bool isConstant() const
-        {
-            return false;
-        }
+        virtual bool isConstant() const { return false; }
 
         //- Return field F
-        virtual tmp<volScalarField> F() const
-        {
-            return F_;
-        }
+        virtual tmp<volScalarField> F() const { return F_; }
         
         //- Return F0, c1, c2
-        virtual const dimensionedScalar F0() const
-        {
-            return F0_;
-        }
+        virtual const dimensionedScalar F0() const { return F0_; }
         
-        virtual const dimensionedScalar c1() const
-        {
-            return c1_;
-        }
+        virtual const dimensionedScalar c1() const { return c1_; }
         
-        virtual const dimensionedScalar c2() const
-        {
-            return c2_;
-        }
+        virtual const dimensionedScalar c2() const { return c2_; }
         
         //- Apply thermFun to compute F_ 
         virtual void calcThermFun

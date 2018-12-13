@@ -45,7 +45,7 @@ Description
       }
        
     This BC is based from the rheoTool library written by Francisco Pimenta
-    and Manuel A. Alves..
+    and Manuel A. Alves.
     
 SeeAlso
     Foam::fixedValueFvPatchField

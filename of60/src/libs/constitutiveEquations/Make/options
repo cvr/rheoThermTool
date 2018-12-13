@@ -1,5 +1,5 @@
 EXE_INC = \
-    -DFULLDEBUG -g -ftemplate-backtrace-limit=100 -O0 \
+    /* -DFULLDEBUG -g -O0 */ \
     -isystem$(EIGEN_RHEO) \
     -I/constitutiveEqs/utils \
     -I$(LIB_SRC)/finiteVolume/lnInclude \

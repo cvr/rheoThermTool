@@ -26,9 +26,13 @@ Class
     PowerLaw
 
 Description
-    PowerLaw flow model, based on:
+    PowerLaw flow model.
+    
+    Based from:
     - libviscoelasticTransportModels library written by Jovani L. Favero.
     - rheoTool library written by Francisco Pimenta and Manuel A. Alves.
+    
+    This class is part of rheoThermTool.
 
 SourceFiles
     PowerLaw.C

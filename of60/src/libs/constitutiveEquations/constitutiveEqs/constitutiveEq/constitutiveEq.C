@@ -328,7 +328,7 @@ tmp<volSymmTensorField> constitutiveEq::tauTotal()
     if (isGNF())
     { 
         //return eta()*symm(L+L.T());  //original, incompressible
-        return eta()*2*symm(L);  //incompressible
+        //return eta()*2*symm(L);  //incompressible
         return eta()*dev(2*symm(L));  //compressible
     }
     else
@@ -336,6 +336,22 @@ tmp<volSymmTensorField> constitutiveEq::tauTotal()
         //return tau() + etaS()*symm(L+L.T());  //original, incompressible
         //return tau() + etaS()*2*symm(L);  //incompressible
         return tau() + etaS()*dev(2*symm(L));  //compressible
+    }
+}
+
+tmp<volSymmTensorField> constitutiveEq::tauN()
+{
+    volTensorField L = fvc::grad(U_);
+     
+    if (isGNF())
+    { 
+        //return eta()*2*symm(L);  //incompressible
+        return eta()*dev(2*symm(L));  //compressible
+    }
+    else
+    {
+        //return etaS()*2*symm(L);  //incompressible
+        return etaS()*dev(2*symm(L));  //compressible
     }
 }
 

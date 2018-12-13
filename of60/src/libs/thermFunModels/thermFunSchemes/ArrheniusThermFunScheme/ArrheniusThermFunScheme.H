@@ -25,7 +25,16 @@ License
 Class
     ArrheniusThermFunScheme
 
-SourceFiles
+Description
+    Applies one version of the Arrhenius model for temperature dependency,
+
+        F = F0 * exp(c1/T - c1/T0)
+    
+    where c1 must have dimensions of dimTemperature.
+    
+    This class is part of rheoThermTool.
+
+Files
     ArrheniusThermFunScheme.C
 
 \*---------------------------------------------------------------------------*/
@@ -95,28 +104,19 @@ public:
 
     // Member Functions
         
+        //- Return true if thermFunScheme is active
+        virtual bool active() const { return true; }
+        
         //- Return false as this thermFun is not constant
-        virtual bool isConstant() const
-        {
-            return false;
-        }
+        virtual bool isConstant() const { return false; }
 
         //- Return field F
-        virtual tmp<volScalarField> F() const
-        {
-            return F_;
-        }
+        virtual tmp<volScalarField> F() const { return F_; }
         
         //- Return F0, c1, c2
-        virtual const dimensionedScalar F0() const
-        {
-            return F0_;
-        }
+        virtual const dimensionedScalar F0() const { return F0_; }
         
-        virtual const dimensionedScalar c1() const
-        {
-            return c1_;
-        }
+        virtual const dimensionedScalar c1() const { return c1_; }
         
         //- Apply thermFun to compute F_ 
         virtual void calcThermFun

@@ -26,13 +26,18 @@ Class
     multiMode
 
 Description
+    WARNING: Development in progress!
+
     Software for combining several viscoelastic fluid models together,
     as a single fluid composed of several sets of solvents and polymer chains.
     It has support for the thermal effects included in each model,
     but may lack full theoretical support.
-    Original code based from:
+    
+    Based from:
     - libviscoelasticTransportModels library written by Jovani L. Favero.
     - rheoTool library written by Francisco Pimenta and Manuel A. Alves.
+    
+    This class is part of rheoThermTool.
 
 SourceFiles
     multiMode.C

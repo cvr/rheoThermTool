@@ -64,21 +64,6 @@ thermFunModel::thermFunModel
 
 // * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * * //
 
-bool thermFunModel::isConstant() const
-{
-    return funPtr_->isConstant();
-}
-
-tmp<volScalarField> thermFunModel::F() const
-{
-    return funPtr_->F();
-}
-
-const dimensionedScalar thermFunModel::F0() const
-{
-    return funPtr_->F0();
-}
-
 void thermFunModel::calcThermFun
 (
     const volScalarField& T,

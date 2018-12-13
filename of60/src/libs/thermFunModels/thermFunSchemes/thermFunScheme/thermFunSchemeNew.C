@@ -36,7 +36,12 @@ Foam::autoPtr<Foam::thermFunScheme> Foam::thermFunScheme::New
     const dictionary& dict
 )
 {
-    word typeName = dict.lookup(name + "ThermFun");
+    word typeName;
+    if ( (name == word::null) || (name == "null") || (name == "NULL") ) {
+        typeName = word("null");
+    } else {
+        typeName = word(dict.lookup(name + "ThermFun"));
+    }
 
     Info<< "Selecting thermFun equation " << typeName << endl;
 
@@ -55,9 +60,14 @@ Foam::autoPtr<Foam::thermFunScheme> Foam::thermFunScheme::New
             << exit(FatalError);
     }
 
-    return autoPtr<thermFunScheme>(cstrIter()(
-        name, T, dict.subDict(name + "ThermFunCoefficients")
-        ));
+    dictionary subdict;
+    if ( typeName == "null" ) {
+        subdict = Foam::dictionary::null;
+    } else {
+        subdict = dict.subDict(name + "ThermFunCoefficients"); 
+    }
+
+    return autoPtr<thermFunScheme>(cstrIter()(name, T, subdict));
 }
 
 

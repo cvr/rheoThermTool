@@ -25,7 +25,15 @@ Class
     Foam::constitutiveTwoPhaseMixture
 
 Description
-    A two-phase GNF or VE transportModel
+    WARNING: Development in progress!
+
+    A two-phase GNF or VE transportModel.
+    
+    Based from:
+    - libviscoelasticTransportModels library written by Jovani L. Favero.
+    - rheoTool library written by Francisco Pimenta and Manuel A. Alves. 
+    
+    This class is part of rheoThermTool.
 
 SourceFiles
     constitutiveTwoPhaseMixture.C

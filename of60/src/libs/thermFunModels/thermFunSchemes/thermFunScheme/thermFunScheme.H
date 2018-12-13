@@ -27,6 +27,12 @@ Class
 
 Description
     Abstract base class from which each specific thermal function is derived.
+    
+    This class is part of rheoThermTool.
+    
+Files
+    thermFunScheme.C
+    thermFunSchemeNew.C
 
 \*---------------------------------------------------------------------------*/
 
@@ -126,6 +132,9 @@ public:
         {
             return name_;
         }
+        
+        //- Return true if thermFunScheme is active
+        virtual bool active() const = 0;
         
         //- Return true if thermFunScheme is constant
         virtual bool isConstant() const = 0;

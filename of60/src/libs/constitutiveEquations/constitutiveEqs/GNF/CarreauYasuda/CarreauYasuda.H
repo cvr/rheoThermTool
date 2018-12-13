@@ -26,9 +26,13 @@ Class
     CarreauYasuda
 
 Description
-    Carreau-Yasuda flow model, based on:
+    Carreau-Yasuda flow model.
+    
+    Based from:
     - libviscoelasticTransportModels library written by Jovani L. Favero.
     - rheoTool library written by Francisco Pimenta and Manuel A. Alves.
+    
+    This class is part of rheoThermTool.
 
 SourceFiles
     CarreauYasuda.C

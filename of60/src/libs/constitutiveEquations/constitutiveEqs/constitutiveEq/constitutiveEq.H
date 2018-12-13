@@ -29,9 +29,11 @@ Description
     Abstract base class from which each specific GNF or viscoelastic model
     is derived.
 
-    Based on:
+    Based from:
     - libviscoelasticTransportModels library written by Jovani L. Favero.
     - rheoTool library written by Francisco Pimenta and Manuel A. Alves. 
+    
+    This class is part of rheoThermTool.
 
 SourceFiles
     constitutiveEq.C
@@ -274,6 +276,10 @@ public:
         //- Return the total stress tensor (solvent + polymeric)
         //  using alpha1 as weight
         virtual tmp<volSymmTensorField> tauTotal();
+
+        //- Return the solvent stress tensor (newtonian)
+        //  using alpha1 as weight
+        virtual tmp<volSymmTensorField> tauN();
         
         //- Return true if GNF (non-elastic)
         virtual bool isGNF() const = 0;

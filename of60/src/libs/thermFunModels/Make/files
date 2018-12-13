@@ -1,15 +1,17 @@
 thermFunModel/thermFunModel.C
 
-thermFunSchemes = thermFunSchemes
-$(thermFunSchemes)/thermFunScheme/thermFunScheme.C
-$(thermFunSchemes)/thermFunScheme/thermFunSchemeNew.C
+thermFunSchemes/thermFunScheme/thermFunScheme.C
+thermFunSchemes/thermFunScheme/thermFunSchemeNew.C
 
-$(thermFunSchemes)/constantFitThermFunScheme/constantFitThermFunScheme.C
+ thermFunSchemes/nullThermFunScheme/nullThermFunScheme.C
 
-$(thermFunSchemes)/LinearFitThermFunScheme/LinearFitThermFunScheme.C
+ thermFunSchemes/constantFitThermFunScheme/constantFitThermFunScheme.C
 
-$(thermFunSchemes)/ArrheniusThermFunScheme/ArrheniusThermFunScheme.C
+ thermFunSchemes/LinearFitThermFunScheme/LinearFitThermFunScheme.C
 
-$(thermFunSchemes)/WLFThermFunScheme/WLFThermFunScheme.C
+ thermFunSchemes/ArrheniusThermFunScheme/ArrheniusThermFunScheme.C
+
+ thermFunSchemes/WLFThermFunScheme/WLFThermFunScheme.C
+
 
 LIB = $(FOAM_USER_LIBBIN)/libThermFunModels

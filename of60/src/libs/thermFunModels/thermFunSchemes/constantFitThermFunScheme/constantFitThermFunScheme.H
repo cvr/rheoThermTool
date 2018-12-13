@@ -24,8 +24,13 @@ License
 
 Class
     constantFitThermFunScheme
+    
+Description
+    Applies a constant field without any temperature dependency, i.e., F = F0. 
+    
+    This class is part of rheoThermTool.
 
-SourceFiles
+Files
     constantFitThermFunScheme.C
 
 \*---------------------------------------------------------------------------*/
@@ -91,23 +96,17 @@ public:
 
     // Member Functions
         
+        //- Return true if thermFunScheme is active
+        virtual bool active() const { return true; }
+        
         //- Return true as this thermFun is constant
-        virtual bool isConstant() const
-        {
-            return true;
-        }
+        virtual bool isConstant() const { return true; }
 
         //- Return field f
-        virtual tmp<volScalarField> F() const
-        {
-            return F_;
-        }
+        virtual tmp<volScalarField> F() const { return F_; }
         
         //- Return F0
-        virtual const dimensionedScalar F0() const
-        {
-            return F0_;
-        }
+        virtual const dimensionedScalar F0() const { return F0_; }
         
         //- Apply thermFun to compute F_
         virtual void calcThermFun

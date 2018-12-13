@@ -26,9 +26,13 @@ Class
     Newtonian
 
 Description
-    Newtonian flow model, based on:
+    Newtonian flow model.
+    
+    Based from:
     - libviscoelasticTransportModels library written by Jovani L. Favero.
     - rheoTool library written by Francisco Pimenta and Manuel A. Alves.
+    
+    This class is part of rheoThermTool.
 
 SourceFiles
     Newtonian.C

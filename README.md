@@ -23,6 +23,12 @@ Fluid models available:
 * VE fluid models: Oldroyd-B, Giesekus, PTT exponential or linear.
 * GNF fluid models: Power Law, Carreau-Yasuda and the standard Newtonian stress tensor.
 
+Thermal functions available:
+* Williams-Landel-Ferry equation.
+* Arrhenius equation.
+* Linear fit.
+* Constant (i.e. no temperature dependency).
+
 Other Characteristics
 * Fully-parallelized solver.
 * Generic grids for 2D/3D problems.

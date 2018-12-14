@@ -25,10 +25,22 @@ boundaryField
     {
         type            zeroGradient;         
     }
-    fixedWalls
+    
+    bottomWall
     {
         type            zeroGradient;         
     }
+    
+    westWall
+    {
+        type            zeroGradient;         
+    }
+    
+    eastWall
+    {
+        type            zeroGradient;         
+    }
+
     frontAndBack
     {
         type            empty;

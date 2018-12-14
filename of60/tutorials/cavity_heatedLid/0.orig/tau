@@ -26,11 +26,25 @@ boundaryField
         type            linearExtrapolation;
         value           uniform (0 0 0 0 0 0);
     }
-    fixedWalls
+    
+    bottomWall
     {
         type            linearExtrapolation;
         value           uniform (0 0 0 0 0 0);
     }
+    
+    westWall
+    {
+        type            linearExtrapolation;
+        value           uniform (0 0 0 0 0 0);
+    }
+    
+    eastWall
+    {
+        type            linearExtrapolation;
+        value           uniform (0 0 0 0 0 0);
+    }
+    
     frontAndBack
     {
         type            empty;

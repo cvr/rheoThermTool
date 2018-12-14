@@ -43,8 +43,8 @@ edges
 boundary
 (
    
-   movingLid
-     {
+    movingLid
+    {
         type wall;
         faces
         (
@@ -52,16 +52,33 @@ boundary
         );
     }
     
-    fixedWalls
+    bottomWall
+    {
+    	type wall;
+	faces
+	(
+            (0 1 5 4)
+	);
+    }
+    
+    westWall
     {
         type wall;
         faces
         (
             (0 3 7 4)
-            (0 1 5 4)
-            (5 6 2 1)            
         );
     }    
+
+    eastWall
+    {
+        type wall;
+        faces
+        (
+            (5 6 2 1)            
+        );
+    }
+
     frontAndBack
     {
         type empty;

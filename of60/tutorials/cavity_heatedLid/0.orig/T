@@ -16,18 +16,29 @@ FoamFile
 
 dimensions      [0 0 0 1 0 0 0];
 
-internalField   uniform 300.0;
+internalField   uniform 450.0;
 
 boundaryField
 {
    
     movingLid
     {
-	//type          zeroGradient;
 	type            fixedValue;
 	value           uniform 500.0;
     }
-    fixedWalls
+    
+    bottomWall
+    {
+	type            fixedValue;
+	value           uniform 400.0;
+    }
+    
+    westWall
+    {
+    	type		zeroGradient;
+    }
+    
+    eastWall
     {
     	type		zeroGradient;
     }

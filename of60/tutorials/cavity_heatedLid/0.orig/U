@@ -26,11 +26,25 @@ boundaryField
         type            fixedValue;
     	value           uniform (1 0 0);
     }
-    fixedWalls
+    
+    bottomWall
     {
         type            fixedValue;
         value           uniform (0 0 0);
     }
+    
+    westWall
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    
+    eastWall
+    {
+        type            fixedValue;
+        value           uniform (0 0 0);
+    }
+    
     frontAndBack
     {
         type            empty;

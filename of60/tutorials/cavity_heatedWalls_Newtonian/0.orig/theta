@@ -9,44 +9,43 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       volScalarField;
-    object      T;
+    class       volSymmTensorField;
+    object      theta;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 0 0 1 0 0 0];
+dimensions      [0 0 0 0 0 0 0];
 
-internalField   uniform 400.0;
+internalField   uniform (0 0 0 0 0 0);
 
 boundaryField
 {
-   
+
     movingLid
     {
-    	type		zeroGradient;
+        type            zeroGradient;         
     }
     
     bottomWall
     {
-    	type		zeroGradient;
+        type            zeroGradient;         
     }
     
     westWall
     {
-	type            fixedValue;
-	value           uniform 300.0;
+        type            zeroGradient;         
     }
     
     eastWall
     {
-	type            fixedValue;
-	value           uniform 500.0;
+        type            zeroGradient;         
     }
+
     frontAndBack
     {
-    	type		empty;
+        type            empty;
     }
-    
+
 }
 
 // ************************************************************************* //

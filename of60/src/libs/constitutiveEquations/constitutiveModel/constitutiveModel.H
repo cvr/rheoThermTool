@@ -99,6 +99,9 @@ public:
 
     // Member Functions
 
+        //- Return the constitutiveEq model name
+        const word& eqTypeName() const { return eqPtr_->type(); }
+
         //- Return the viscoelastic stress tensor
         virtual tmp<volSymmTensorField> tau() { return eqPtr_->tau(); }
         

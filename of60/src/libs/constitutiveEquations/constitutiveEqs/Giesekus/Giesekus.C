@@ -80,6 +80,9 @@ Foam::constitutiveEqs::Giesekus::Giesekus
 {
     checkForStab(dict);
 
+    rhoRef().rename("rho" + name);
+    rhoRef().readOpt() = IOobject::READ_IF_PRESENT;
+    rhoRef().writeOpt() = IOobject::AUTO_WRITE;
     rhoRef() = volScalarField
     (
         IOobject
@@ -94,6 +97,9 @@ Foam::constitutiveEqs::Giesekus::Giesekus
         dimensionedScalar(dict.lookup("rho"))
     );
 
+    etaSRef().rename("etaS" + name);
+    etaSRef().readOpt() = IOobject::READ_IF_PRESENT;
+    etaSRef().writeOpt() = IOobject::AUTO_WRITE;
     etaSRef() = volScalarField
     (
         IOobject
@@ -108,6 +114,9 @@ Foam::constitutiveEqs::Giesekus::Giesekus
         dimensionedScalar(dict.lookup("etaS"))
     );
 
+    etaPRef().rename("etaP" + name);
+    etaPRef().readOpt() = IOobject::READ_IF_PRESENT;
+    etaPRef().writeOpt() = IOobject::AUTO_WRITE;
     etaPRef() = volScalarField
     (
         IOobject

@@ -111,6 +111,9 @@ Foam::constitutiveEqs::CarreauYasuda::CarreauYasuda
         dimensionedScalar(dict.lookup("etaInf"))
     )
 {
+    rhoRef().rename("rho" + name);
+    rhoRef().readOpt() = IOobject::READ_IF_PRESENT;
+    rhoRef().writeOpt() = IOobject::AUTO_WRITE;
     rhoRef() = volScalarField
     (
         IOobject
@@ -125,6 +128,9 @@ Foam::constitutiveEqs::CarreauYasuda::CarreauYasuda
         dimensionedScalar(dict.lookup("rho"))
     );
 
+    etaRef().rename("eta" + name);
+    etaRef().readOpt() = IOobject::READ_IF_PRESENT;
+    etaRef().writeOpt() = IOobject::AUTO_WRITE;
     etaRef() = volScalarField
     (
         IOobject

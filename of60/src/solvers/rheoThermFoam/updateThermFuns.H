@@ -12,6 +12,13 @@ kt.calcThermFun(T, T0);
 //           scope only and I cannot get it out!
 //           This works as a kind of hack.
 
+if ( (&constEq.etaRef() != nullptr) && (constEq.eqTypeName() == "Newtonian") )
+{
+    //Info<< "Update thermFun for eta (GNF Newtonian)" << endl;
+    (*eta).calcThermFun(T, T0);
+    constEq.etaRef() = (*eta).F();
+}
+
 if (&constEq.kRef() != nullptr)
 {
     //Info<< "Update thermFun for k (GNF)" << endl;

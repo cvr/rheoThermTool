@@ -94,8 +94,12 @@ autoPtr<volScalarField> C
 );
 
 
-Info<< "Creating model(s) for constitutive equation\n" << endl;
+Info<< "\nCreating model(s) for constitutive equation" << endl;
 constitutiveModel constEq(U, phi, T);
+
+//Info<< "constitutiveModel name = " << constEq.name() << endl << endl;
+//Info<< "constitutiveModel type = " << constEq.type() << endl << endl;
+Info<< "Constitutive equation type: " << constEq.eqTypeName() << endl << endl;
 
 
 #include "createThermFuns.H"

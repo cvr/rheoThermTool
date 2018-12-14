@@ -9,42 +9,45 @@ FoamFile
 {
     version     2.0;
     format      ascii;
-    class       volScalarField;
-    object      T;
+    class       volSymmTensorField;
+    object      tau;
 }
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
-dimensions      [0 0 0 1 0 0 0];
+dimensions      [1 -1 -2 0 0 0 0];
 
-internalField   uniform 400.0;
+internalField   uniform (0 0 0 0 0 0);
 
 boundaryField
 {
-   
+
     movingLid
     {
-    	type		zeroGradient;
+        type            linearExtrapolation;
+        value           uniform (0 0 0 0 0 0);
     }
     
     bottomWall
     {
-    	type		zeroGradient;
+        type            linearExtrapolation;
+        value           uniform (0 0 0 0 0 0);
     }
     
     westWall
     {
-	type            fixedValue;
-	value           uniform 300.0;
+        type            linearExtrapolation;
+        value           uniform (0 0 0 0 0 0);
     }
     
     eastWall
     {
-	type            fixedValue;
-	value           uniform 500.0;
+        type            linearExtrapolation;
+        value           uniform (0 0 0 0 0 0);
     }
+    
     frontAndBack
     {
-    	type		empty;
+        type            empty;
     }
     
 }

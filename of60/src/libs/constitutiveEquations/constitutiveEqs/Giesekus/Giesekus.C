@@ -172,6 +172,16 @@ void Foam::constitutiveEqs::Giesekus::correct()
     // Twice the rate of deformation tensor
     volSymmTensorField twoD = twoSymm(L);
 
+    // Compute dotLambda = Dlambda/Dt
+    //volScalarField dotLambda = fvc::ddt(lambda_)
+    //    + fvc::div(phi(),lambda_) - lambda_*fvc::div(phi());
+    volScalarField dotLambda = fvc::DDt(phi(), lambda_);
+
+    // Compute dotEtaP = DetaP/Dt
+    //volScalarField dotEtaP = fvc::ddt(etaPRef())
+    //    + fvc::div(phi(),etaPRef()) - etaPRef()*fvc::div(phi());
+    volScalarField dotEtaP = fvc::DDt(phi(), etaPRef());
+
     // Stress transport equation
     fvSymmTensorMatrix tauEqn
     (
@@ -185,6 +195,11 @@ void Foam::constitutiveEqs::Giesekus::correct()
       // Thermal dependency dotT*Ht
       - fvm::SuSp(-dotTHfun(), tau_)  // Thermal dependency dotT*H*tau_
       + dotTHfun()*etaP()/lambda_*Itensor  // Thermal dependency dotT*H*G*I
+      // The following term appears when the constitutive equation is formulated
+      // in terms of deviatoric tau tensor instead of the Cauchy sigma tensor,
+      // when expanding the upper-convected derivative of sigma.
+      // It yields zero if the thermal functions of lambda and etaP are the same.
+      + (etaP()/lambda_*dotLambda - dotEtaP)/lambda_*Itensor
     );
 
     tauEqn.relax();

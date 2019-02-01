@@ -37,6 +37,8 @@ divSchemes
     div(phi,theta)           GaussDefCmpw cubista;
     div(phi,tau)             GaussDefCmpw cubista;
     div(phi,T)		     GaussDefCmpw cubista;
+    div(phi,lambda)          Gauss linear;
+    div(phi,etaP)            Gauss linear;
 }
 
 laplacianSchemes

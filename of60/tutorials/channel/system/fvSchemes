@@ -34,10 +34,12 @@ divSchemes
     div(tau)                 Gauss linear; 
     div(grad(U))             Gauss linear;
     div(phi,U)               GaussDefCmpw none;  
-    div(phi,theta)            GaussDefCmpw cubista;
+    div(phi,theta)           GaussDefCmpw cubista;
     div(phi,tau)             GaussDefCmpw cubista;
     div(phi,C)               GaussDefCmpw cubista;
     div(phi,T)		     GaussDefCmpw cubista;
+    div(phi,lambda)          Gauss linear;
+    div(phi,etaP)            Gauss linear;
 }
 
 laplacianSchemes

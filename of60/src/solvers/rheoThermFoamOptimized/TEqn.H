@@ -16,7 +16,9 @@ fvScalarMatrix TEqn
         //constEq.tauN() && symm(fvc::grad(U))  // can be simplified...
         constEq.tauN() && fvc::grad(U)  // T:S==T:grad(U) for symmetric T
     )
-  //+ constEq.energyExtraTerms()  // WARNING: elastic dissipation removed
+  + (
+      constEq.energyExtraTerms()
+    )
   //- fvm::SuSp(-cte*fvc::DDt(p), T)  // eventually when an EOS is added
   + fvOptions(cp.F()*constEq.rho(), T)
 );
@@ -30,3 +32,4 @@ TEqn.solve();
 fvOptions.correct(T);
 
 #include "updateThermFuns.H"
+

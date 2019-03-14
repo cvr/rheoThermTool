@@ -13,10 +13,20 @@ fvScalarMatrix TEqn
   - fvm::laplacian(kt.F(), T, "laplacian(kt,T)")
   ==
     (
+        newtonDissSwitch
+        ?
         //constEq.tauN() && symm(fvc::grad(U))  // can be simplified...
         constEq.tauN() && fvc::grad(U)  // T:S==T:grad(U) for symmetric T
+        :
+        zeroDissTerm
     )
-  + constEq.energyExtraTerms()
+  + (
+      velastDissSwitch
+      ?
+      constEq.energyExtraTerms()
+      :
+      zeroDissTerm
+    )
   //- fvm::SuSp(-cte*fvc::DDt(p), T)  // eventually when an EOS is added
   + fvOptions(cp.F()*constEq.rho(), T)
 );
@@ -30,3 +40,4 @@ TEqn.solve();
 fvOptions.correct(T);
 
 #include "updateThermFuns.H"
+

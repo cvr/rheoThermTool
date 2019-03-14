@@ -26,6 +26,9 @@ parameters
 
 	stabilization	coupling;
 
+//      Optional terms (evaluated as true if ommited)
+//	newtonianDissipationTerm    true;  // false, remove term from energyEq
+//	viscoelasticDissipationTerm true;  // false, remove term from energyEq
 }
 
 thermophysicalProperties {

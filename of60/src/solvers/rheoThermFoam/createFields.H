@@ -105,3 +105,27 @@ Info<< "Constitutive equation type: " << constEq.eqTypeName() << endl << endl;
 #include "createThermFuns.H"
 
 
+// Checking for heat generation switches
+bool newtonDissSwitch = cttProperties.subDict("parameters").lookupOrDefault<Switch>("newtonianDissipationTerm", true);
+bool velastDissSwitch = cttProperties.subDict("parameters").lookupOrDefault<Switch>("viscoelasticDissipationTerm", true);
+
+newtonDissSwitch ?: Info<< "Neglecting heat generation from newtonian viscous dissipation" << endl;
+velastDissSwitch ?: Info<< "Neglecting heat generation from viscoelastic dissipation" << endl;
+
+tmp<volScalarField> zeroDissTerm
+(
+    new volScalarField
+    (
+        IOobject
+        (
+            "zeroDissTerm",
+            runTime.timeName(),
+            mesh,
+            IOobject::NO_READ,
+            IOobject::NO_WRITE
+        ),
+        mesh,
+        dimensionedScalar("zeroDissTerm", dimPressure*dimVelocity/dimLength, 0.0)
+    )
+);
+

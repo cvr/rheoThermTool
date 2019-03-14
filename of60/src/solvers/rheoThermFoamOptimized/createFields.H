@@ -104,4 +104,3 @@ Info<< "Constitutive equation type: " << constEq.eqTypeName() << endl << endl;
 
 #include "createThermFuns.H"
 
-

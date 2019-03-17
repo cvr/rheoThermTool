@@ -18,14 +18,14 @@ fvScalarMatrix TEqn
         //constEq.tauN() && symm(fvc::grad(U))  // can be simplified...
         constEq.tauN() && fvc::grad(U)  // T:S==T:grad(U) for symmetric T
         :
-        zeroDissTerm
+        tmp<volScalarField> ( zeroDissTerm )
     )
   + (
-      velastDissSwitch
-      ?
-      constEq.energyExtraTerms()
-      :
-      zeroDissTerm
+        velastDissSwitch
+        ?
+        constEq.energyExtraTerms()
+        :
+        tmp<volScalarField> ( zeroDissTerm )
     )
   //- fvm::SuSp(-cte*fvc::DDt(p), T)  // eventually when an EOS is added
   + fvOptions(cp.F()*constEq.rho(), T)

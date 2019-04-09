@@ -1,0 +1,5 @@
+linearExtrapolation/linearExtrapolationFvPatchFields.C
+navierSlip/navierSlipFvPatchVectorField.C
+
+
+LIB = $(FOAM_USER_LIBBIN)/libBCRheoThermTool

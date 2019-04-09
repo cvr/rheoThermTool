@@ -1,0 +1,22 @@
+EXE_INC = \
+    -DFULLDEBUG -g -ftemplate-backtrace-limit=100 -O0 \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I$(LIB_SRC)/meshTools/lnInclude \
+    -I$(LIB_SRC)/sampling/lnInclude \
+    -I$(FOAM_RUN)/../src/rheoThermTool/thermFunModels/lnInclude \
+    -I$(FOAM_RUN)/../src/rheoThermTool/constitutiveEquations/lnInclude \
+    -I$(FOAM_RUN)/../src/rheoThermTool/gaussDefCmpwConvectionScheme/lnInclude \
+    -I$(FOAM_RUN)/../src/rheoThermTool/boundaryConditions/lnInclude \
+    -I$(FOAM_RUN)/../src/rheoThermTool/postProcessing/postProcUtils/lnInclude
+    
+EXE_LIBS = \
+    -lfiniteVolume \
+    -lmeshTools \
+    -lfvOptions \
+    -lsampling \
+    -L$(FOAM_USER_LIBBIN) -lThermFunModels \
+    -L$(FOAM_USER_LIBBIN) -lRheoThermConstitutiveEq \
+    -L$(FOAM_USER_LIBBIN) -lgaussDefCmpwConvectionSchemes \
+    -L$(FOAM_USER_LIBBIN) -lBCRheoThermTool \
+    -L$(FOAM_USER_LIBBIN) -lpostProcessingRheoThermTool
+

@@ -1,0 +1,10 @@
+postProcUtils/ppUtil.C 
+
+postProcUtils/calcWSS/calcWSS.C
+
+postProcUtils/none/none.C
+
+postProcUtilsInterface/ppUtilInterface.C
+
+
+LIB = $(FOAM_USER_LIBBIN)/libpostProcessingRheoThermTool

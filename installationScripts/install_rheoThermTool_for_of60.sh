@@ -4,13 +4,13 @@
 
 cat << EOF
 »»»»»»»»»»»»»»»»  rheoThermTool  ««««««««««««««««
-»»»  Installation script for OpenFOAM+ v1806  «««
+»»»  Installation script for OpenFOAM-6  «««
 
 
-This script will install rheoThermTool on a system with OpenFOAM+ v1806
+This script will install rheoThermTool on a system with OpenFOAM-6
 
 The information that the user should supply is:
-WM_PROJECT_DIR        path for OpenFOAM-v1806 installation
+WM_PROJECT_DIR        path for OpenFOAM-6 installation
 RHEOTHERM_ROOT        path where rheoThermTool will be compiled
 EIGEN_ROOT            path where to install Eigen
 EOF
@@ -99,7 +99,7 @@ git clone https://github.com/cvr/rheoThermTool rheoThermTool
 cd rheoThermTool/
 git log --decorate --graph > README_gitlog.md
 VersionDate=$(git log -1 --format="%at" | xargs -I{} date -d @{} +%Y%m%d)
-rm -rf .git .gitignore of60
+rm -rf .git .gitignore of+1806
 cd ../
 mv rheoThermTool "rheoThermTool-${VersionDate}"
 ln -sf "rheoThermTool-${VersionDate}" rheoThermTool
@@ -127,7 +127,7 @@ function RTT {
   export EIGEN_RHEO=$EIGEN_RHEO
   export RHEOTHERM_APPBIN=\$RHEOTHERM_DIR/platforms/\$WM_OPTIONS/bin
   export RHEOTHERM_LIBBIN=\$RHEOTHERM_DIR/platforms/\$WM_OPTIONS/lib
-  export RHEOTHERM_TUTORIALS=\$RHEOTHERM_DIR/of+1806/tutorials
+  export RHEOTHERM_TUTORIALS=\$RHEOTHERM_DIR/of60/tutorials
   export LD_LIBRARY_PATH=\$RHEOTHERM_LIBBIN:\$LD_LIBRARY_PATH
   export PATH=\$RHEOTHERM_APPBIN:\$PATH
 }
@@ -149,7 +149,7 @@ echo "Installing rheoThermTool..."
 
 . $RHEOTHERM_ROOT/envars_rheoThermTool.sh
 
-cd $RHEOTHERM_DIR/of+1806/src
+cd $RHEOTHERM_DIR/of60/src
 
 env \
     WM_PROJECT_USER_DIR="${RHEOTHERM_DIR}" \
@@ -159,7 +159,7 @@ env \
 
 
 echo "Checking for compilation errors"
-grep --color=auto -i error $RHEOTHERM_DIR/of+1806/src/log.Allwmake1
+grep --color=auto -i error $RHEOTHERM_DIR/of60/src/log.Allwmake1
 
 
 echo "Test rheoThermTool installation"

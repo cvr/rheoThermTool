@@ -77,7 +77,9 @@ Foam::constitutiveEqs::PTTlinear::PTTlinear
         ),
         U.mesh(),
         dimensionedScalar(dict.lookup("lambda"))
-    )
+    ),
+    dotTHfunSwitch_(dict.lookupOrDefault<Switch>("dotTHfunSwitch", true)),
+    calcDotTHfun_("calcDotTHfun", dimless, 1)
 {
     checkForStab(dict);
 
@@ -131,6 +133,14 @@ Foam::constitutiveEqs::PTTlinear::PTTlinear
         U.mesh(),
         dimensionedScalar(dict.lookup("etaP"))
     );
+
+    if (!dotTHfunSwitch_)
+    {
+        Info<< "Neglecting fluid structure dependence on temperature" << endl;
+        calcDotTHfun_ = 0;
+    }
+    Info<< "calcDotTHfun_ = " << calcDotTHfun_ << endl;
+
 }
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
@@ -152,7 +162,8 @@ Foam::tmp<Foam::volScalarField> Foam::constitutiveEqs::PTTlinear::dotTHfun()
     (
         new volScalarField
         (
-            "dotTHfun", elastEnergDiss_/T()*DTDt - fvc::div(phi())
+            "dotTHfun",
+            calcDotTHfun_ * ( elastEnergDiss_/T()*DTDt - fvc::div(phi()) )
         )
     );
 }

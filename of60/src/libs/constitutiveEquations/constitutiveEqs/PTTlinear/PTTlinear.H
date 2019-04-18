@@ -79,6 +79,11 @@ class PTTlinear
             //- Relaxation time
             volScalarField lambda_;
 
+         // Model switches
+
+            bool dotTHfunSwitch_;
+            dimensionedScalar calcDotTHfun_;
+
 
     // Private Member Functions
 

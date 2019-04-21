@@ -235,7 +235,7 @@ Foam::tmp<Foam::volScalarField> Foam::constitutiveEqs::PTTlinear::energyExtraTer
                   + etaP()/lambda_*fvc::div(phi())
                   )
               + (1.0 - elastEnergDiss_)
-                * Foam::exp(epsilon_*lambda_/etaP()*tr(tau_))
+                * (epsilon_*lambda_/etaP()*tr(tau_) + 1.0)
                 * tr(tau_)/(2.0*lambda_)
             )
         )

@@ -78,6 +78,8 @@ Foam::constitutiveEqs::PTTlinear::PTTlinear
         U.mesh(),
         dimensionedScalar(dict.lookup("lambda"))
     ),
+    dotLambdaSwitch_(dict.lookupOrDefault<Switch>("dotLambdaSwitch", true)),
+    dotEtaPSwitch_(dict.lookupOrDefault<Switch>("dotEtaPSwitch", true)),
     dotTHfunSwitch_(dict.lookupOrDefault<Switch>("dotTHfunSwitch", true)),
     calcDotTHfun_("calcDotTHfun", dimless, 1)
 {
@@ -134,6 +136,16 @@ Foam::constitutiveEqs::PTTlinear::PTTlinear
         dimensionedScalar(dict.lookup("etaP"))
     );
 
+    if (!dotLambdaSwitch_)
+    {
+        Info<< "Neglecting influence of lambda total derivative" << endl;
+    }
+    
+    if (!dotEtaPSwitch_)
+    {
+        Info<< "Neglecting influence of etaP total derivative" << endl;
+    }
+
     if (!dotTHfunSwitch_)
     {
         Info<< "Neglecting fluid structure dependence on temperature" << endl;
@@ -188,11 +200,17 @@ void Foam::constitutiveEqs::PTTlinear::correct()
     //volScalarField dotLambda = fvc::ddt(lambda_)
     //    + fvc::div(phi(),lambda_) - lambda_*fvc::div(phi());
     volScalarField dotLambda = fvc::DDt(phi(), lambda_);
-
+    if (!dotLambdaSwitch_) { dotLambda *= 0; }
+        
     // Compute dotEtaP = DetaP/Dt
     //volScalarField dotEtaP = fvc::ddt(etaPRef())
     //    + fvc::div(phi(),etaPRef()) - etaPRef()*fvc::div(phi());
     volScalarField dotEtaP = fvc::DDt(phi(), etaPRef());
+    if (!dotEtaPSwitch_) { dotEtaP *= 0; }
+
+    //Info<< "DEBUG max(|dotLambda|) = " << max(mag(dotLambda)) << endl;
+    //Info<< "DEBUG max(|dotEtaP|) = " << max(mag(dotEtaP)) << endl;
+    //Info<< "DEBUG max(|dotTHfun|) = " << max(mag(dotTHfun())) << endl;
 
     // Stress transport equation
     fvSymmTensorMatrix tauEqn

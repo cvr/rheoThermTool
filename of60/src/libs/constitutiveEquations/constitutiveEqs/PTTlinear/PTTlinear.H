@@ -81,7 +81,12 @@ class PTTlinear
 
          // Model switches
 
+            bool dotLambdaSwitch_;
+            
+            bool dotEtaPSwitch_;
+
             bool dotTHfunSwitch_;
+            
             dimensionedScalar calcDotTHfun_;
 
 

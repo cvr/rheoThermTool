@@ -183,7 +183,7 @@ Foam::tmp<Foam::volScalarField> Foam::constitutiveEqs::PTTexp::dotTHfun()
 void Foam::constitutiveEqs::PTTexp::correct()
 {
     dimensionedSymmTensor Itensor
-    ( 
+    (
         "Identity", dimensionSet(0, 0, 0, 0, 0, 0, 0), symmTensor::I
     );
 

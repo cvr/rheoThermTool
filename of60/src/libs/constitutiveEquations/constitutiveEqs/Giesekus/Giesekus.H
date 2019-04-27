@@ -65,7 +65,7 @@ class Giesekus
         volSymmTensorField tau_;
 
         // Model constants
-            
+
             //- elasticEnergyDissipation factor
             dimensionedScalar elastEnergDiss_;
 
@@ -74,6 +74,16 @@ class Giesekus
 
             //- Relaxation time
             volScalarField lambda_;
+
+         // Model switches
+
+            bool dotLambdaSwitch_;
+            
+            bool dotEtaPSwitch_;
+
+            bool dotTHfunSwitch_;
+            
+            dimensionedScalar calcDotTHfun_;
 
 
     // Private Member Functions

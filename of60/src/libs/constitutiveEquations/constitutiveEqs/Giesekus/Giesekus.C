@@ -76,7 +76,11 @@ Foam::constitutiveEqs::Giesekus::Giesekus
         ),
         U.mesh(),
         dimensionedScalar(dict.lookup("lambda"))
-    )
+    ),
+    dotLambdaSwitch_(dict.lookupOrDefault<Switch>("dotLambdaSwitch", true)),
+    dotEtaPSwitch_(dict.lookupOrDefault<Switch>("dotEtaPSwitch", true)),
+    dotTHfunSwitch_(dict.lookupOrDefault<Switch>("dotTHfunSwitch", true)),
+    calcDotTHfun_("calcDotTHfun", dimless, 1)
 {
     checkForStab(dict);
 
@@ -130,6 +134,24 @@ Foam::constitutiveEqs::Giesekus::Giesekus
         U.mesh(),
         dimensionedScalar(dict.lookup("etaP"))
     );
+
+    if (!dotLambdaSwitch_)
+    {
+        Info<< "Neglecting influence of lambda total derivative" << endl;
+    }
+    
+    if (!dotEtaPSwitch_)
+    {
+        Info<< "Neglecting influence of etaP total derivative" << endl;
+    }
+
+    if (!dotTHfunSwitch_)
+    {
+        Info<< "Neglecting fluid structure dependence on temperature" << endl;
+        calcDotTHfun_ = 0;
+    }
+    Info<< "calcDotTHfun_ = " << calcDotTHfun_ << endl;
+
 }
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
@@ -150,8 +172,9 @@ Foam::tmp<Foam::volScalarField> Foam::constitutiveEqs::Giesekus::dotTHfun()
     return tmp<volScalarField>
     (
         new volScalarField
-        (   
-            "dotTHfun", elastEnergDiss_/T()*DTDt - fvc::div(phi())
+        (
+            "dotTHfun",
+            calcDotTHfun_ * ( elastEnergDiss_/T()*DTDt - fvc::div(phi()) )
         )
     );
 }
@@ -176,11 +199,17 @@ void Foam::constitutiveEqs::Giesekus::correct()
     //volScalarField dotLambda = fvc::ddt(lambda_)
     //    + fvc::div(phi(),lambda_) - lambda_*fvc::div(phi());
     volScalarField dotLambda = fvc::DDt(phi(), lambda_);
-
+    if (!dotLambdaSwitch_) { dotLambda *= 0; }
+        
     // Compute dotEtaP = DetaP/Dt
     //volScalarField dotEtaP = fvc::ddt(etaPRef())
     //    + fvc::div(phi(),etaPRef()) - etaPRef()*fvc::div(phi());
     volScalarField dotEtaP = fvc::DDt(phi(), etaPRef());
+    if (!dotEtaPSwitch_) { dotEtaP *= 0; }
+
+    //Info<< "DEBUG max(|dotLambda|) = " << max(mag(dotLambda)) << endl;
+    //Info<< "DEBUG max(|dotEtaP|) = " << max(mag(dotEtaP)) << endl;
+    //Info<< "DEBUG max(|dotTHfun|) = " << max(mag(dotTHfun())) << endl;
 
     // Stress transport equation
     fvSymmTensorMatrix tauEqn
@@ -188,10 +217,10 @@ void Foam::constitutiveEqs::Giesekus::correct()
         fvm::ddt(tau_)
       + fvm::div(phi(), tau_)
      ==
-        etaP()/lambda_*twoD
-      + twoSymm(C)
-      - (alpha_/etaP())*(symm(tau_ & tau_))
+        twoSymm(C)
+      + etaP()/lambda_*twoD
       - fvm::Sp(1.0/lambda_, tau_)
+      - (alpha_/etaP())*(symm(tau_ & tau_))
       // Thermal dependency dotT*Ht
       - fvm::SuSp(-dotTHfun(), tau_)  // Thermal dependency dotT*H*tau_
       + dotTHfun()*etaP()/lambda_*Itensor  // Thermal dependency dotT*H*G*I

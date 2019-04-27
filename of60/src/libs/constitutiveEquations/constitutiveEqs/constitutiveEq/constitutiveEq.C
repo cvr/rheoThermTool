@@ -151,7 +151,7 @@ tmp<fvVectorMatrix> constitutiveEq::divTau
                 fvc::div(tau()/rho(), "div(tau)")
               + fvm::laplacian((etaP() + etaS())/rho(), U, "laplacian(eta,U)")
               + fvc::div(etaS()/rho()*dev2(Foam::T(L)), "div(eta*dev2(T(gradU)))")
-              - fvc::laplacian(etaP()/rho(), U, "laplacian(etaP,U)")
+              - fvc::laplacian(etaP()/rho(), U, "laplacian(eta,U)")
             );
 
             case soCoupling :  // coupling - accounts for variable etaS or etaP
@@ -160,8 +160,8 @@ tmp<fvVectorMatrix> constitutiveEq::divTau
                 fvc::div(tau()/rho(), "div(tau)")
               + fvm::laplacian((etaP() + etaS())/rho(), U, "laplacian(eta,U)")
               + fvc::div(etaS()/rho()*dev2(Foam::T(L)), "div(eta*dev2(T(gradU)))")
-              - fvc::div(etaP()/rho()*L, "div(etaP*grad(U))")
-              //- etaP() / rho() * fvc::div(L)
+              - fvc::div(etaP()/rho()*L, "div(eta*gradU)")
+              //- etaP() / rho() * fvc::div(L, "div(gradU)")
               //- (fvc::grad(etaP()/rho()) & L)
             );
          
@@ -183,7 +183,7 @@ tmp<fvVectorMatrix> constitutiveEq::divTauS
         return
         (
             fvm::laplacian(eta()*alpha, U, "laplacian(eta,U)")
-          + fvc::div(eta()*alpha*dev2(Foam::T(L)), "div(eta*alpha*dev2(T(gradU)))")
+          + fvc::div(eta()*alpha*dev2(Foam::T(L)), "div(eta*dev2(T(gradU)))")
         ); 
     }
     else
@@ -195,23 +195,23 @@ tmp<fvVectorMatrix> constitutiveEq::divTauS
             return
             (        
                 fvm::laplacian(etaS()*alpha, U, "laplacian(eta,U)")
-              + fvc::div(etaS()*alpha*dev2(Foam::T(L)), "div(eta*alpha*dev2(T(gradU)))")
+              + fvc::div(etaS()*alpha*dev2(Foam::T(L)), "div(eta*dev2(T(gradU)))")
             );
 
             case soBSD :  // BSD - accounts for variable etaS or etaP
             return
             (
                 fvm::laplacian((etaP() + etaS())*alpha, U, "laplacian(eta,U)")
-              + fvc::div(etaS()*alpha*dev2(Foam::T(L)), "div(eta*alpha*dev2(T(gradU)))")
-              - fvc::laplacian(etaP()*alpha, U, "laplacian(etaP,U)")
+              + fvc::div(etaS()*alpha*dev2(Foam::T(L)), "div(eta*dev2(T(gradU)))")
+              - fvc::laplacian(etaP()*alpha, U, "laplacian(eta,U)")
             );
           
             case soCoupling :  // coupling  - accounts for variable etaS or etaP
             return
             (        
                 fvm::laplacian((etaP() + etaS())*alpha, U, "laplacian(eta,U)")
-              + fvc::div(etaS()*alpha*dev2(Foam::T(L)), "div(eta*alpha*dev2(T(gradU)))")
-              - fvc::div(etaP()*alpha*L, "div(etaP*grad(U))")
+              + fvc::div(etaS()*alpha*dev2(Foam::T(L)), "div(eta*dev2(T(gradU)))")
+              - fvc::div(etaP()*alpha*L, "div(eta*gradU)")
             ); 
          
             default:  // This will never happen

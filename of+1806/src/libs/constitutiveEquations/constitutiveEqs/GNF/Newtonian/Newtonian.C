@@ -109,8 +109,7 @@ Foam::constitutiveEqs::Newtonian::Newtonian
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
 // Note: for the Newtonian model (constant viscosity) it is optional to re-define
-// divTau() and divTauS(). By re-defining, a scalar viscosity is used, instead of
-// a volScalarField with a constant value.
+// divTau() and divTauS().
 
 Foam::tmp<Foam::fvVectorMatrix> Foam::constitutiveEqs::Newtonian::divTau
 (
@@ -120,6 +119,7 @@ Foam::tmp<Foam::fvVectorMatrix> Foam::constitutiveEqs::Newtonian::divTau
     return
     (
         fvm::laplacian(eta()/rho(), U, "laplacian(eta,U)")
+      + fvc::div(eta()/rho()*dev2(Foam::T(fvc::grad(U))), "div(eta*dev2(T(gradU)))")
     );
 }
 
@@ -129,12 +129,10 @@ Foam::tmp<Foam::fvVectorMatrix> Foam::constitutiveEqs::Newtonian::divTauS
     const volScalarField& alpha
 ) const
 {
-    //volTensorField L = fvc::grad(U);
     return
     (
         fvm::laplacian(eta()*alpha, U, "laplacian(eta,U)")
-      //+ fvc::div(eta()*alpha*dev2(L.T()), "div(eta*alpha*dev2(gradU.T()))")
-      + fvc::div(eta()*alpha*dev2(Foam::T(fvc::grad(U))), "div(eta*alpha*dev2(T(gradU)))")
+      + fvc::div(eta()*alpha*dev2(Foam::T(fvc::grad(U))), "div(eta*dev2(T(gradU)))")
     );    
 }
 

@@ -43,7 +43,7 @@ ppUtil::ppUtil
 )
 :
 U_(U),
-outS_(NULL),
+outS_(nullptr),
 ppDir_(word::null),
 enabled_(dict.lookupOrDefault<bool>("enabled", false)),
 nEval_(dict.lookupOrDefault<int>("evaluateInterval", 10000)),

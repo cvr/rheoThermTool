@@ -34,7 +34,7 @@ License
 // * * * * * * * * * * * * * * * * Static Data  * * * * * * * * * * * * * * //
  
 Foam::autoPtr<Foam::volSymmTensorField>
-Foam::navierSlipFvPatchVectorField::tauTotalPtr(NULL);
+Foam::navierSlipFvPatchVectorField::tauTotalPtr(nullptr);
 
 void Foam::navierSlipFvPatchVectorField::
 updateTauTotalPtr(const Foam::volSymmTensorField& tau)

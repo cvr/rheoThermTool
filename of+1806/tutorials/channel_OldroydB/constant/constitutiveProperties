@@ -24,11 +24,14 @@ parameters
 	etaP		etaP	[1 -1 -1 0 0 0 0]	10.;  // polystyrene melt
 	lambda		lambda	[0  0  1 0 0 0 0]	0.002;
 
-	stabilization	coupling;
+	stabilization	BSD;  // choose between none, BSD or coupling
 
 //      Optional terms (evaluated as true if ommited)
 //	newtonianDissipationTerm    true;  // false, remove term from energyEq
 //	viscoelasticDissipationTerm true;  // false, remove term from energyEq
+//	dotLambdaSwitch true;  // false, remove term from constitutiveEq
+//	dotEtaPSwitch true;  // false, remove term from constitutiveEq
+//	dotTHfunSwitch true;  // false, remove term from constitutiveEq and TEq
 }
 
 thermophysicalProperties {

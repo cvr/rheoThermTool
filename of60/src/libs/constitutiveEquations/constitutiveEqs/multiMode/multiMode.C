@@ -138,7 +138,7 @@ Foam::constitutiveEqs::multiMode::divTauS(const volVectorField& U, const volScal
 
 Foam::tmp<Foam::volSymmTensorField> Foam::constitutiveEqs::multiMode::tau() const
 {
-    tau_ *= 0;
+    tau_ = tau_ * 0;
 
     for (label i = 0; i < models_.size(); i++)
     {

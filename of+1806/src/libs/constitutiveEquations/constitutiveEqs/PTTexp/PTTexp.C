@@ -77,7 +77,11 @@ Foam::constitutiveEqs::PTTexp::PTTexp
         ),
         U.mesh(),
         dimensionedScalar(dict.lookup("lambda"))
-    )
+    ),
+    dotLambdaSwitch_(dict.lookupOrDefault<Switch>("dotLambdaSwitch", true)),
+    dotEtaPSwitch_(dict.lookupOrDefault<Switch>("dotEtaPSwitch", true)),
+    dotTHfunSwitch_(dict.lookupOrDefault<Switch>("dotTHfunSwitch", true)),
+    calcDotTHfun_("calcDotTHfun", dimless, 1)
 {
     checkForStab(dict);
 
@@ -131,6 +135,24 @@ Foam::constitutiveEqs::PTTexp::PTTexp
         U.mesh(),
         dimensionedScalar(dict.lookup("etaP"))
     );
+
+    if (!dotLambdaSwitch_)
+    {
+        Info<< "Neglecting influence of lambda total derivative" << endl;
+    }
+    
+    if (!dotEtaPSwitch_)
+    {
+        Info<< "Neglecting influence of etaP total derivative" << endl;
+    }
+
+    if (!dotTHfunSwitch_)
+    {
+        Info<< "Neglecting fluid structure dependence on temperature" << endl;
+        calcDotTHfun_ = 0;
+    }
+    Info<< "calcDotTHfun_ = " << calcDotTHfun_ << endl;
+
 }
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
@@ -152,7 +174,8 @@ Foam::tmp<Foam::volScalarField> Foam::constitutiveEqs::PTTexp::dotTHfun()
     (
         new volScalarField
         (
-            "dotTHfun", elastEnergDiss_/T()*DTDt - fvc::div(phi())
+            "dotTHfun",
+            calcDotTHfun_ * ( elastEnergDiss_/T()*DTDt - fvc::div(phi()) )
         )
     );
 }
@@ -160,7 +183,7 @@ Foam::tmp<Foam::volScalarField> Foam::constitutiveEqs::PTTexp::dotTHfun()
 void Foam::constitutiveEqs::PTTexp::correct()
 {
     dimensionedSymmTensor Itensor
-    ( 
+    (
         "Identity", dimensionSet(0, 0, 0, 0, 0, 0, 0), symmTensor::I
     );
 
@@ -177,11 +200,17 @@ void Foam::constitutiveEqs::PTTexp::correct()
     //volScalarField dotLambda = fvc::ddt(lambda_)
     //    + fvc::div(phi(),lambda_) - lambda_*fvc::div(phi());
     volScalarField dotLambda = fvc::DDt(phi(), lambda_);
-
+    if (!dotLambdaSwitch_) { dotLambda = dotLambda * 0; }
+        
     // Compute dotEtaP = DetaP/Dt
     //volScalarField dotEtaP = fvc::ddt(etaPRef())
     //    + fvc::div(phi(),etaPRef()) - etaPRef()*fvc::div(phi());
     volScalarField dotEtaP = fvc::DDt(phi(), etaPRef());
+    if (!dotEtaPSwitch_) { dotEtaP = dotEtaP * 0; }
+
+    //Info<< "DEBUG max(|dotLambda|) = " << max(mag(dotLambda)) << endl;
+    //Info<< "DEBUG max(|dotEtaP|) = " << max(mag(dotEtaP)) << endl;
+    //Info<< "DEBUG max(|dotTHfun|) = " << max(mag(dotTHfun())) << endl;
 
     // Stress transport equation
     fvSymmTensorMatrix tauEqn

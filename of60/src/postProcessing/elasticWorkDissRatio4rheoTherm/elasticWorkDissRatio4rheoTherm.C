@@ -329,11 +329,11 @@ int main(int argc, char *argv[])
 
         bool validConstitutiveModel = true;
         
-        volScalarField eDWr
+        volScalarField eWDr
         (
             IOobject
             (
-                "eDWr",
+                "eWDr",
                 runTime.timeName(),
                 mesh,
                 IOobject::NO_READ,
@@ -343,37 +343,37 @@ int main(int argc, char *argv[])
             dimensionedScalar("zero", dimless, 0.0)
         );
         
-        volScalarField eDWr_den = (tau && fvc::grad(U)) + etaP/lambda*fvc::div(phi);
+        volScalarField eWDr_den = (tau && fvc::grad(U)) + etaP/lambda*fvc::div(phi);
       
-        forAll(eDWr_den.boundaryField(), patchi)
+        forAll(eWDr_den.boundaryField(), patchi)
         {
-            forAll (eDWr_den.boundaryField()[patchi], facei)
+            forAll (eWDr_den.boundaryField()[patchi], facei)
             {
-                if (fabs(eDWr_den.boundaryField()[patchi][facei]) < ROOTSMALL)
+                if (fabs(eWDr_den.boundaryField()[patchi][facei]) < ROOTSMALL)
                 {
-                    if (eDWr_den.boundaryField()[patchi][facei] >= 0)
+                    if (eWDr_den.boundaryField()[patchi][facei] >= 0)
                     {
-                        eDWr_den.boundaryFieldRef()[patchi][facei] = ROOTSMALL;
+                        eWDr_den.boundaryFieldRef()[patchi][facei] = ROOTSMALL;
                     }
                     else
                     {
-                        eDWr_den.boundaryFieldRef()[patchi][facei] = -ROOTSMALL;
+                        eWDr_den.boundaryFieldRef()[patchi][facei] = -ROOTSMALL;
                     }
                 }
             }
         }
      
-        forAll(eDWr_den, celli)
+        forAll(eWDr_den, celli)
         {
-            if (fabs(eDWr_den[celli]) < ROOTSMALL)
+            if (fabs(eWDr_den[celli]) < ROOTSMALL)
             {
-                if (eDWr_den[celli] >= 0)
+                if (eWDr_den[celli] >= 0)
                 {
-                    eDWr_den[celli] = ROOTSMALL;
+                    eWDr_den[celli] = ROOTSMALL;
                 }
                 else
                 {
-                    eDWr_den[celli] = -ROOTSMALL;
+                    eWDr_den[celli] = -ROOTSMALL;
                 }
             }
         }
@@ -418,8 +418,8 @@ int main(int argc, char *argv[])
                 cttProperties.subDict("parameters").lookup("epsilon")
             );
         
-            eDWr = Foam::exp(epsilon*lambda/etaP*tr(tau)) * tr(tau)
-                / (2.0 * lambda * eDWr_den);
+            eWDr = Foam::exp(epsilon*lambda/etaP*tr(tau)) * tr(tau)
+                / (2.0 * lambda * eWDr_den);
         }
         else if (word("PTTlinear") == typeName)
         {
@@ -428,8 +428,8 @@ int main(int argc, char *argv[])
                 cttProperties.subDict("parameters").lookup("epsilon")
             );
             
-            eDWr = (epsilon*lambda/etaP*tr(tau) + 1.0) * tr(tau)
-                / (2.0 * lambda * eDWr_den);
+            eWDr = (epsilon*lambda/etaP*tr(tau) + 1.0) * tr(tau)
+                / (2.0 * lambda * eWDr_den);
         }
         else if (word("Giesekus") == typeName)
         {
@@ -438,12 +438,12 @@ int main(int argc, char *argv[])
                 cttProperties.subDict("parameters").lookup("alpha")
             );
             
-            eDWr = (alpha * lambda/etaP * (tau && tau) + tr(tau))
-                / (2.0 * lambda * eDWr_den);
+            eWDr = (alpha * lambda/etaP * (tau && tau) + tr(tau))
+                / (2.0 * lambda * eWDr_den);
         }
         else if (word("Oldroyd-B") == typeName)
         {
-            eDWr = tr(tau) / (2.0 * lambda * eDWr_den);
+            eWDr = tr(tau) / (2.0 * lambda * eWDr_den);
         }
         else
         {
@@ -458,22 +458,22 @@ int main(int argc, char *argv[])
             //return 1;
         }
 
-        forAll(eDWr.boundaryField(), patchi)
+        forAll(eWDr.boundaryField(), patchi)
         {
-            forAll (eDWr.boundaryField()[patchi], facei)
+            forAll (eWDr.boundaryField()[patchi], facei)
             {
-                eDWr.boundaryFieldRef()[patchi][facei] = 0;
+                eWDr.boundaryFieldRef()[patchi][facei] = 0;
             }
         }
 
         if (validConstitutiveModel)
         {
             Info<< "Writing field '"
-                << eDWr.name()
+                << eWDr.name()
                 << "' to "
                 << runTime.timeName()
                 << "/" <<endl;
-            eDWr.write();
+            eWDr.write();
         }
         else
         {

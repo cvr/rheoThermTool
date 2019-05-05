@@ -6,5 +6,6 @@ cd ${0%/*} || exit 1    # Run from this directory
 
 set -x
 
-wmake wallHeatFluxRheoTherm
+wmake wallHeatFlux4rheoTherm
+wmake elasticWorkDissRatio4rheoTherm
 

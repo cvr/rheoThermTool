@@ -1,0 +1,13 @@
+EXE_INC = \
+    /* -DFULLDEBUG -g -O0 */ \
+    -I$(LIB_SRC)/meshTools/lnInclude \
+    -I$(LIB_SRC)/finiteVolume/lnInclude \
+    -I../../libs/constitutiveEquations/lnInclude \
+    -I../../libs/boundaryConditions/lnInclude \
+
+EXE_LIBS = \
+    -lfiniteVolume \
+    -lmeshTools \
+    -L$(FOAM_USER_LIBBIN) -lRheoThermConstitutiveEq \
+    -L$(FOAM_USER_LIBBIN) -lBCRheoThermTool
+

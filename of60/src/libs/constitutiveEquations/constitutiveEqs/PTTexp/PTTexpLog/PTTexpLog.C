@@ -24,7 +24,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 
-#include "PTTlinear.H"
+#include "PTTexpLog.H"
 #include "addToRunTimeSelectionTable.H"
 
 // * * * * * * * * * * * * * * Static Data Members * * * * * * * * * * * * * //
@@ -33,14 +33,14 @@ namespace Foam
 {
 namespace constitutiveEqs 
 {
-    defineTypeNameAndDebug(PTTlinear, 0);
-    addToRunTimeSelectionTable(constitutiveEq, PTTlinear, dictionary);
+    defineTypeNameAndDebug(PTTexpLog, 0);
+    addToRunTimeSelectionTable(constitutiveEq, PTTexpLog, dictionary);
 }
 }
 
 // * * * * * * * * * * * * * * * * Constructors  * * * * * * * * * * * * * * //
 
-Foam::constitutiveEqs::PTTlinear::PTTlinear
+Foam::constitutiveEqs::PTTexpLog::PTTexpLog
 (
     const word& name,
     const volVectorField& U,
@@ -61,6 +61,56 @@ Foam::constitutiveEqs::PTTlinear::PTTlinear
             IOobject::AUTO_WRITE
         ),
         U.mesh()
+    ),
+    theta_
+    (
+        IOobject
+        (
+            "theta" + name,
+            U.time().timeName(),
+            U.mesh(),
+            IOobject::MUST_READ,
+            IOobject::AUTO_WRITE
+        ),
+        U.mesh()
+    ),
+    eigVals_
+    (
+        IOobject
+        (
+            "eigVals" + name,
+            U.time().timeName(),
+            U.mesh(),
+            IOobject::READ_IF_PRESENT,
+            IOobject::AUTO_WRITE
+        ),
+        U.mesh(),
+        dimensionedTensor
+        (
+                "I",
+                dimless,
+                pTraits<tensor>::I
+        ),
+         extrapolatedCalculatedFvPatchField<tensor>::typeName
+    ),
+    eigVecs_
+    (
+        IOobject
+        (
+            "eigVecs" + name,
+            U.time().timeName(),
+            U.mesh(),
+            IOobject::READ_IF_PRESENT,
+            IOobject::AUTO_WRITE
+        ),
+        U.mesh(),
+        dimensionedTensor
+        (
+                "I",
+                dimless,
+                pTraits<tensor>::I
+        ),
+         extrapolatedCalculatedFvPatchField<tensor>::typeName
     ),
     elastEnergDiss_(dict.lookup("elastEnergDiss")),
     epsilon_(dict.lookup("epsilon")),
@@ -157,7 +207,7 @@ Foam::constitutiveEqs::PTTlinear::PTTlinear
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
 
-Foam::tmp<Foam::volScalarField> Foam::constitutiveEqs::PTTlinear::dotTHfun()
+Foam::tmp<Foam::volScalarField> Foam::constitutiveEqs::PTTexpLog::dotTHfun()
 {
     //- Get dimensionless ln(T) field to compute DlnT/Dt
     //  WARNING: This may yield problems if the ln(T) field is not
@@ -180,7 +230,7 @@ Foam::tmp<Foam::volScalarField> Foam::constitutiveEqs::PTTlinear::dotTHfun()
     );
 }
 
-void Foam::constitutiveEqs::PTTlinear::correct()
+void Foam::constitutiveEqs::PTTexpLog::correct()
 {
     dimensionedSymmTensor Itensor
     (
@@ -190,11 +240,11 @@ void Foam::constitutiveEqs::PTTlinear::correct()
     // Velocity gradient tensor
     volTensorField L = fvc::grad(U());
 
-    // Convected derivate term
-    volTensorField C = tau_ & L;
-
-    // Twice the rate of deformation tensor
-    volSymmTensorField twoD = twoSymm(L);
+    dimensionedScalar c1( "zero", dimensionSet(0, 0, -1, 0, 0, 0, 0), 0.);
+    volTensorField B = c1 * eigVecs_;
+    volTensorField omega = B;
+    volTensorField M = (eigVecs_.T() & ( L.T() - zeta_*symm(L) ) & eigVecs_);
+    decomposeGradU (M, eigVals_, eigVecs_, omega, B);
 
     // Compute dotLambda = Dlambda/Dt
     //volScalarField dotLambda = fvc::ddt(lambda_)
@@ -212,33 +262,38 @@ void Foam::constitutiveEqs::PTTlinear::correct()
     //Info<< "DEBUG max(|dotEtaP|) = " << max(mag(dotEtaP)) << endl;
     //Info<< "DEBUG max(|dotTHfun|) = " << max(mag(dotTHfun())) << endl;
 
-    // Stress transport equation
-    fvSymmTensorMatrix tauEqn
+    // Solve the constitutive Eq in theta = log(c)
+    fvSymmTensorMatrix thetaEqn
     (
-        fvm::ddt(tau_)
-      + fvm::div(phi(), tau_)
-     ==
-        twoSymm(C)
-      - fvm::Sp(epsilon_/etaP()*tr(tau_) + 1.0/lambda_, tau_)
-      //- 0.5*zeta_*(symm(tau_ & twoD) + symm(twoD & tau_))  // why? ...
-      - zeta_*(symm(tau_ & twoD))  // this must yield the same as above!
-      //+ etaP()/lambda_*twoD  // incorrect, check below
-      + (1.0 - zeta_)*etaP()/lambda_*twoD  // slip factor should also be here
-      // Thermal dependency dotT*Ht
-      - fvm::SuSp(-dotTHfun(), tau_)  // Thermal dependency dotT*H*tau_
-      + calcDotTHfun_ * dotTHfun()*etaP()/lambda_*Itensor  // Thermal dependency dotT*H*G*I
-      // The following term appears when the constitutive equation is formulated
-      // in terms of deviatoric tau tensor instead of the Cauchy sigma tensor,
-      // when expanding the upper-convected derivative of sigma.
-      // It yields zero if the thermal functions of lambda and etaP are the same.
-      + (etaP()/lambda_*dotLambda - dotEtaP)/lambda_*Itensor
+        fvm::ddt(theta_)
+      + fvm::div(phi(), theta_)
+      ==
+        symm
+        (
+            (omega & theta_) - (theta_ & omega) + 2.0 * B
+          + Foam::exp(epsilon_ / (1.0 - zeta_)
+          * (tr((eigVecs_ & eigVals_ & eigVecs_.T())) - 3.0)) / lambda_
+          * ( eigVecs_ & (inv(eigVals_) - Itensor) & eigVecs_.T() )
+          + calcDotTHfun_ * dotTHfun() * Itensor  // Thermal dependency dotT*H
+          // The following term appears when the constitutive equation is formulated
+          // in terms of deviatoric tau tensor instead of the Cauchy sigma tensor,
+          // when expanding the upper-convected derivative of sigma.
+          // It yields zero if the thermal functions of lambda and etaP are the same.
+          + (dotLambda / lambda_ - dotEtaP / etaP()) * Itensor
+        )
     );
 
-    tauEqn.relax();
-    tauEqn.solve();
+    thetaEqn.relax();
+    thetaEqn.solve();
+    // Diagonalization of theta
+    calcEig(theta_, eigVals_, eigVecs_);
+    // Convert from theta to tau
+    tau_ = (etaP() / lambda_ / (1.0 - zeta_))
+        * symm((eigVecs_ & eigVals_ & eigVecs_.T()) - Itensor);
+    tau_.correctBoundaryConditions();
 }
 
-Foam::tmp<Foam::volScalarField> Foam::constitutiveEqs::PTTlinear::energyExtraTerms()
+Foam::tmp<Foam::volScalarField> Foam::constitutiveEqs::PTTexpLog::energyExtraTerms()
 {
     return tmp<volScalarField>
     (
@@ -253,7 +308,7 @@ Foam::tmp<Foam::volScalarField> Foam::constitutiveEqs::PTTlinear::energyExtraTer
                   + etaP()/lambda_*fvc::div(phi())
                   )
               + (1.0 - elastEnergDiss_)
-                * (epsilon_*lambda_/etaP()*tr(tau_) + 1.0)
+                * Foam::exp(epsilon_*lambda_/etaP()*tr(tau_))
                 * tr(tau_)/(2.0*lambda_)
             )
         )

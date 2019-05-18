@@ -34,11 +34,12 @@ Other Characteristics
 * Generic grids for 2D/3D problems.
 * Solvers support either moving or static meshes.
 * Transient flow solvers are highly stable regarding pressure-stress-velocity coupling.
+* Two stabilization methods for the Momentum Equations based on *Both-Side Diffusion*.
+* Log-conformation method to stabilize the Constitutive Equation, available for all VE fluid models.
 
 
 ## To be implemented
 
-* Log-conformation tensor approach for the viscoelastic models.
 * Solver for two-phase flows, using any GNF or VE fluid models for each phase.
 * Wider range of tutorials to illustrate the application of the solvers to different problems.
 

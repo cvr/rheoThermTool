@@ -69,50 +69,88 @@ The following third-party software is used in `rheoThermTool`:
 
 ### Requirements
 
-* Compatible and functional version of OpenFOAM or OpenFOAM®, already installed.
+* Compatible and functional version of [OpenFOAM-6](https://github.com/OpenFOAM/OpenFOAM-6) or [OpenFOAM®-v1806](https://develop.openfoam.com/Development/OpenFOAM-plus), already installed.
 * Internet connection to download the [Eigen](http://eigen.tuxfamily.org/) C++ linear algebra library.
 
-### Installation process
 
-Assuming your OpenFOAM installation is located in a path
-specified by variable `$OFDIR` (for example, `OFDIR=/opt/OpenFOAM/OpenFOAM-6`),
-source the environment OpenFOAM variables and check if those are correct:
+### Basic installation instructions for OpenFOAM-6
+
+These instructions are appropriate for installation under the user's home path.
+For the sake of simplicity, it is assumed that OpenFOAM-6 was previously installed
+at `~/OpenFOAM/OpenFOAM-6`. Also, string `user` will be used as a placeholder for the user's name.
+
+1. Define environmental variable `OFDIR` pointing to the OpenFOAM installation:
 ```sh
-. $OFDIR/etc/bashrc
-
-echo "WM_PROJECT_INST_DIR = $WM_PROJECT_INST_DIR"
-echo "WM_PROJECT_USER_DIR = $WM_PROJECT_USER_DIR"
-
-echo "FOAM_USER_APPBIN = $FOAM_USER_APPBIN"
-echo "FOAM_USER_LIBBIN = $FOAM_USER_LIBBIN"
-
-echo "FOAM_APPBIN = $FOAM_APPBIN"
-echo "FOAM_LIBBIN = $FOAM_LIBBIN"
+user:~ $  OFDIR=~/OpenFOAM/OpenFOAM-6
 ```
 
-Choose a directory where `rheoThermTool` will be installed.
-A good candidate is `$WM_PROJECT_USER_DIR` or equivalently `$FOAM_RUN/../`.
+2. Source the environment OpenFOAM variables:
 ```sh
-cd $WM_PROJECT_USER_DIR
-git clone https://github.com/cvr/rheoThermTool
-cd rheoThermTool
-```
-With these instructions, `rheoThermTool` source code and tutorials
-are located in `$WM_PROJECT_USER_DIR/rheoThermTool`.
-
-Install Eigen and define the `$EIGEN_RHEO` variable with the corresponding path for its libraries:
-```sh
-./downloadEigen
-EIGEN_RHEO=$(find $WM_PROJECT_USER_DIR/ThirdParty/ -maxdepth 1 -type d -iname "eigen*" | head -n 1)
-export EIGEN_RHEO
+user:~ $  source $OFDIR/etc/bashrc
 ```
 
-Install `rheoThermTool`.
+3. Certify the environment variables were correctly loaded, e.g.:
 ```sh
-cd of60/src
-./Allwmake 2>&1 | tee -a logAllwmake.out
+user:~ $  echo $WM_PROJECT_INST_DIR
+/home/user/OpenFOAM/OpenFOAM-6
+
+user:~ $  echo $WM_PROJECT_USER_DIR
+/home/user/OpenFOAM/user-6
+
+user:~ $  echo $FOAM_USER_APPBIN
+/home/user/OpenFOAM/user-6/platforms/linux64GccDPInt32Opt/bin
+
+user:~ $  echo $FOAM_USER_LIBBIN
+/home/user/OpenFOAM/user-6/platforms/linux64GccDPInt32Opt/lib
 ```
-Consult the `logAllwmake.out` file to understand if there were any installation problems.
+
+4. Choose a directory where `rheoThermTool` will be installed.
+A good candidate is `$WM_PROJECT_USER_DIR`.
+Assuming that `rheoThermTool` will be installed at `$WM_PROJECT_USER_DIR`,
+go to that folder and clone the `rheoThermTool` repository:
+```sh
+user:~ $  cd $WM_PROJECT_USER_DIR
+
+user:~/OpenFOAM/user-6 $  git clone https://github.com/cvr/rheoThermTool
+
+user:~/OpenFOAM/user-6 $  cd rheoThermTool
+```
+With these instructions, `rheoThermTool` source code and tutorials will be located in `$WM_PROJECT_USER_DIR/rheoThermTool`.
+
+5. Install Eigen and define the `$EIGEN_RHEO` variable with the corresponding path for its libraries:
+```sh
+user:~/OpenFOAM/user-6/rheoThermTool $  ./downloadEigen
+
+user:~/OpenFOAM/user-6/rheoThermTool $  export EIGEN_RHEO=$(find $WM_PROJECT_USER_DIR/ThirdParty/ -maxdepth 1 -type d -iname "eigen*" | head -n 1)
+
+user:~/OpenFOAM/user-6/rheoThermTool $  echo $EIGEN_RHEO
+/home/user/OpenFOAM/user-6/ThirdParty/Eigen3.2.9
+```
+
+6. Compile corresponding `rheoThermTool` source code:
+```sh
+user:~/OpenFOAM/user-6/rheoThermTool $  cd of60/src
+
+user:~/OpenFOAM/user-6/rheoThermTool/of60/src $  ./Allwmake 2>&1 | tee -a log.Allwmake
+```
+
+7. Consult the `log.Allwmake` file to understand if there were any installation problems.
+```sh
+user:~/OpenFOAM/user-6/rheoThermTool/of60/src $  grep -i error log.Allwmake
+
+user:~/OpenFOAM/user-6/rheoThermTool/of60/src $  grep "bin/rheoThermFoam" log.Allwmake
+     -lm -o /opt/OpenFOAM/ThirdParty-v1806/rheoThermTool/platforms/linux64GccDPInt32Opt/bin/rheoThermFoam
+     -lm -o /opt/OpenFOAM/ThirdParty-v1806/rheoThermTool/platforms/linux64GccDPInt32Opt/bin/rheoThermFoamOptimized
+```
+
+
+### Basic installation instructions for OpenFOAM®-v1806
+
+The instructions are the same as for OpenFOAM-6, with the following differences:
+
+* Environment variable `OFDIR` should point to OpenFOAM®-v1806 installation path,
+e.g. `ODFIR=~/OpenFOAM/OpenFOAM-v1806`.
+* The corresponding `rheoThermTool` source code is under the `of+1806/src` folder.
 
 
 ### Test installation
@@ -128,7 +166,6 @@ mirrorMesh -noFunctionObjects -overwrite
 rheoThermFoam
 paraFoam
 ```
-
 
 ## Libraries compiled by `rheoThermTool`
 
@@ -175,20 +212,9 @@ cd of60/src
 ```
 
 
-
-
-
-
-
-
-
-
-
-
-
 ## Copyright notice
 
-Copyright (C) 2018 by Carlos Veiga Rodrigues <carlos.rodrigues@fe.up.pt>
+Copyright (C) 2018-2019 by Carlos Veiga Rodrigues <carlos.rodrigues@fe.up.pt>
 and Alexandre Afonso Afonso <aafonso@fe.up.pt>. All rights reserved.
 
 This program is free software: you can redistribute it and/or modify

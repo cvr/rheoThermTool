@@ -7,7 +7,7 @@ cat << EOF
 »»»  Installation script for OpenFOAM+ v1806  «««
 
 
-This script will install rheoThermTool on a system with OpenFOAM+ v1806
+This script will install rheoThermTool on a system with OpenFOAM®+ v1806
 
 The information that the user should supply is:
 WM_PROJECT_DIR        path for OpenFOAM-v1806 installation

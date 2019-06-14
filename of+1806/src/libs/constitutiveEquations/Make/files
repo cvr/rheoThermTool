@@ -4,12 +4,16 @@ constitutiveEqs/constitutiveEq/constitutiveEq.C
 constitutiveEqs/constitutiveEq/constitutiveEqNew.C
 
  constitutiveEqs/Oldroyd-B/Oldroyd_B.C
+ constitutiveEqs/Oldroyd-B/Oldroyd-BLog/Oldroyd_BLog.C
 
  constitutiveEqs/Giesekus/Giesekus.C
+ constitutiveEqs/Giesekus/GiesekusLog/GiesekusLog.C
 
  constitutiveEqs/PTTexp/PTTexp.C
+ constitutiveEqs/PTTexp/PTTexpLog/PTTexpLog.C
  
  constitutiveEqs/PTTlinear/PTTlinear.C
+ constitutiveEqs/PTTlinear/PTTlinearLog/PTTlinearLog.C
 
  constitutiveEqs/GNF/Newtonian/Newtonian.C
  constitutiveEqs/GNF/PowerLaw/PowerLaw.C

@@ -118,8 +118,7 @@ public:
 
     // Destructor
 
-        virtual ~PTTexp()
-        {}
+        virtual ~PTTexp() {}
 
 
     // Member Functions

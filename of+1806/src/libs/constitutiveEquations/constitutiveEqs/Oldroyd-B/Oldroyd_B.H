@@ -111,8 +111,7 @@ public:
 
     // Destructor
 
-        virtual ~Oldroyd_B()
-        {}
+        virtual ~Oldroyd_B() {}
 
 
     // Member Functions

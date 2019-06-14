@@ -5,7 +5,7 @@
 ## Source OpenFOAM and rheoThermTool environment variables
 . /opt/OpenFOAM/OpenFOAM-v1806/etc/bashrc
 
-cd $RHEOTHERM_DIR/of+1606
+cd $RHEOTHERM_DIR/of+1806
 
 while true; do
 	read -p "Update code with that one in the repository [y-yes, n-no]? " yn

@@ -114,8 +114,7 @@ public:
 
     // Destructor
 
-        virtual ~Giesekus()
-        {}
+        virtual ~Giesekus() {}
 
 
     // Member Functions

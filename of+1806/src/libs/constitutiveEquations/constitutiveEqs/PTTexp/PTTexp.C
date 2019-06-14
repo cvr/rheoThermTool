@@ -140,7 +140,7 @@ Foam::constitutiveEqs::PTTexp::PTTexp
     {
         Info<< "Neglecting influence of lambda total derivative" << endl;
     }
-    
+
     if (!dotEtaPSwitch_)
     {
         Info<< "Neglecting influence of etaP total derivative" << endl;
@@ -148,11 +148,11 @@ Foam::constitutiveEqs::PTTexp::PTTexp
 
     if (!dotTHfunSwitch_)
     {
-        Info<< "Neglecting fluid structure dependence on temperature" << endl;
+        Info<< "Neglecting fluid structure dependence on temperature" 
+            << " in the Constitutive Eq" << endl;
         calcDotTHfun_ = 0;
     }
     Info<< "calcDotTHfun_ = " << calcDotTHfun_ << endl;
-
 }
 
 // * * * * * * * * * * * * * * * Member Functions  * * * * * * * * * * * * * //
@@ -175,7 +175,7 @@ Foam::tmp<Foam::volScalarField> Foam::constitutiveEqs::PTTexp::dotTHfun()
         new volScalarField
         (
             "dotTHfun",
-            calcDotTHfun_ * ( elastEnergDiss_/T()*DTDt - fvc::div(phi()) )
+            elastEnergDiss_/T()*DTDt - fvc::div(phi())
         )
     );
 }
@@ -217,7 +217,7 @@ void Foam::constitutiveEqs::PTTexp::correct()
     (
         fvm::ddt(tau_)
       + fvm::div(phi(), tau_)
-     ==
+      ==
         twoSymm(C)
       - fvm::Sp((1.0/lambda_)*Foam::exp(epsilon_*lambda_/etaP()*tr(tau_)), tau_)
       //- 0.5*zeta_*(symm(tau_ & twoD) + symm(twoD & tau_))  // why? ...
@@ -226,7 +226,7 @@ void Foam::constitutiveEqs::PTTexp::correct()
       + (1.0 - zeta_)*etaP()/lambda_*twoD  // slip factor should also be here
       // Thermal dependency dotT*Ht
       - fvm::SuSp(-dotTHfun(), tau_)  // Thermal dependency dotT*H*tau_
-      + dotTHfun()*etaP()/lambda_*Itensor  // Thermal dependency dotT*H*G*I
+      + calcDotTHfun_ * dotTHfun()*etaP()/lambda_*Itensor  // Thermal dependency dotT*H*G*I
       // The following term appears when the constitutive equation is formulated
       // in terms of deviatoric tau tensor instead of the Cauchy sigma tensor,
       // when expanding the upper-convected derivative of sigma.

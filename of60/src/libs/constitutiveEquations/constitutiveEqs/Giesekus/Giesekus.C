@@ -199,13 +199,13 @@ void Foam::constitutiveEqs::Giesekus::correct()
     //volScalarField dotLambda = fvc::ddt(lambda_)
     //    + fvc::div(phi(),lambda_) - lambda_*fvc::div(phi());
     volScalarField dotLambda = fvc::DDt(phi(), lambda_);
-    if (!dotLambdaSwitch_) { dotLambda *= 0; }
+    if (!dotLambdaSwitch_) { dotLambda = dotLambda * 0; }
         
     // Compute dotEtaP = DetaP/Dt
     //volScalarField dotEtaP = fvc::ddt(etaPRef())
     //    + fvc::div(phi(),etaPRef()) - etaPRef()*fvc::div(phi());
     volScalarField dotEtaP = fvc::DDt(phi(), etaPRef());
-    if (!dotEtaPSwitch_) { dotEtaP *= 0; }
+    if (!dotEtaPSwitch_) { dotEtaP = dotEtaP * 0; }
 
     //Info<< "DEBUG max(|dotLambda|) = " << max(mag(dotLambda)) << endl;
     //Info<< "DEBUG max(|dotEtaP|) = " << max(mag(dotEtaP)) << endl;
@@ -216,7 +216,7 @@ void Foam::constitutiveEqs::Giesekus::correct()
     (
         fvm::ddt(tau_)
       + fvm::div(phi(), tau_)
-     ==
+      ==
         twoSymm(C)
       + etaP()/lambda_*twoD
       - fvm::Sp(1.0/lambda_, tau_)

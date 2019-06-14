@@ -118,8 +118,7 @@ public:
 
     // Destructor
 
-        virtual ~PTTlinear()
-        {}
+        virtual ~PTTlinear() {}
 
 
     // Member Functions
